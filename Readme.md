@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Андрей Трухов](https://up.htmlacademy.ru/javascript/27/user/30255).
-* Наставник: [Павел Лукин](https://github.com/o-bender?tab=overview&from=2022-08-01&to=2022-08-31)`.
+* Наставник: [Павел Лукин](https://htmlacademy.ru/profile/id1313529).
 
 ---
 
