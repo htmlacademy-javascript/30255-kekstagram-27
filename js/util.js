@@ -9,7 +9,7 @@ const getRandomPositiveInteger = (a,b) => {
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-//const commentLength = (str,maxLength) => str.length <= maxLength;
-export{getRandomPositiveInteger, getRandomArrayElement};
 
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+
+export{getRandomPositiveInteger, getRandomArrayElement};
