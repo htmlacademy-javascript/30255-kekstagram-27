@@ -1,2 +1,3 @@
 import {makePhotos} from './data.js';
-makePhotos ();
+import {renderPictures} from './picture.js';
+renderPictures(makePhotos());
