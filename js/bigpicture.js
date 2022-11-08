@@ -4,12 +4,16 @@ const commentList = document.querySelector('.social__comments');
 const commentsLoader = document.querySelector('.comments-loader');
 const body = document.querySelector('body');
 const cancelButton = document.querySelector('.big-picture__cancel');
+const commentTemplate = document.querySelector('#social__comment')
+  .content.querySelector('.social__comment');
 
 const createComment = ({avatar, name, message}) => {
-  const comment = document.createElement('li');
+  const comment = commentTemplate.cloneNode(true);
+  //Добавляем разметку для комментариев с помощью innerHTML
+  /*const comment = document.createElement('li');
   comment.innerHTML =
 '<img class="social__picture" src="" alt="" width="35" height="35"><p class="social__text"></p>';
-  comment.classList.add('.social__comment');
+  comment.classList.add('.social__comment');*/
 
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__picture').alt = name;
@@ -20,15 +24,17 @@ const createComment = ({avatar, name, message}) => {
 
 
 const renderComments = (comments) => {
-  commentList.innerHTML = '';
-
-  const fragment = document.createDocumentFragment();
+  // commentList.innerHTML = ''; 1 - способ очистить данные в шаблоне, чтобы затем подставить свои
+  commentList.replaceChildren(); /* второй способ */
+  commentList.append(...comments.map(createComment));
+  // вариант добавления комментариев через fragment
+  /*const fragment = document.createDocumentFragment();
   comments.forEach((comment) => {
     const commentElement = createComment(comment);
     fragment.append(commentElement);
   });
 
-  commentList.append(fragment);
+  commentList.append(fragment);*/
 };
 
 const hideBigPicture = () => {

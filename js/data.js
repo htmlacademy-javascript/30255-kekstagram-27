@@ -18,7 +18,7 @@ const MESSAGE_ARRAY = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
-const makeMessage = (len) => Array.from({length: len}, () => getRandomArrayElement(MESSAGE_ARRAY)).join(' ');
+const makeMessage = (len) => Array.from({length: len}, () => getRandomArrayElement(MESSAGE_ARRAY)).join('');
 const makeComment = (id) => ({
   id: id,
   avatar: `img/avatar-${ getRandomPositiveInteger(1,6) }.svg`,
