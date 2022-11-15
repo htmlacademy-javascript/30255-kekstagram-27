@@ -31,7 +31,7 @@ const makePhoto = (id) => ({
   url: `photos/${ id }.jpg`,
   description: getRandomArrayElement(DESCRIPTION_ARRAY),
   likes:getRandomPositiveInteger(15,200),
-  comments: makeComments(getRandomPositiveInteger(1,3))
+  comments: makeComments(getRandomPositiveInteger(6,11))
 });
 const makePhotos = () => Array.from({length: NUMBER_OF_PHOTOS }, (_, index) => makePhoto(index + 1));
 export{makePhotos};
