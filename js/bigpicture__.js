@@ -1,8 +1,9 @@
-const NUMBER_OF_SHOWED_COMMENTS = 5;
+const NUMBER_OF_SHOWED_COMMENTS = 10;
 const bigPicture = document.querySelector('.big-picture');
 const commentsShowedCount = document.querySelector('.social__comment-count');
 const CommentsLoaded = document.querySelector('.social__comments').children;
 const commentList = document.querySelector('.social__comments');
+const commentsLoaderButton = document.querySelector('.comments-loader');
 const body = document.querySelector('body');
 const cancelButton = document.querySelector('.big-picture__cancel');
 const commentTemplate = document.querySelector('#social__comment')
@@ -12,9 +13,9 @@ const createComment = ({avatar, name, message}) => {
   const comment = commentTemplate.cloneNode(true);
   //Добавляем разметку для комментариев с помощью innerHTML
   /*const comment = document.createElement('li');
-    comment.innerHTML =
-  '<img class="social__picture" src="" alt="" width="35" height="35"><p class="social__text"></p>';
-    comment.classList.add('.social__comment');*/
+  comment.innerHTML =
+'<img class="social__picture" src="" alt="" width="35" height="35"><p class="social__text"></p>';
+  comment.classList.add('.social__comment');*/
 
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__picture').alt = name;
@@ -42,7 +43,7 @@ const hideBigPicture = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   cancelButton.removeEventListener('click', onCancelButtonClick);
-  document.removeEventListener('keydown', onEscKeyDown);
+  document.removeEventListener('click', onEscKeyDown);
 };
 
 function onEscKeyDown(evt) {
@@ -61,49 +62,46 @@ const renderPicture = ({ url, likes, description }) => {
   bigPicture.querySelector('.big-picture__img img').alt = description;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__caption').textContent = description;
+
 };
+const splitComments = (comments) => {
 
-const createCommentsLoadButton = (onLoadButtonClick) => {
-  // Вот эти три строчки можно вынести в template
-  const button = document.createElement('button');
-  button.classList.value = 'social__comments-loader comments-loader';
-  button.textContent = 'Загрузить еще';
-
-  button.addEventListener('click', onLoadButtonClick);
-
-  const oldButton = document.querySelector('.comments-loader');
-  if (oldButton) {
-    oldButton.replaceWith(button);
+  const commentsBlocks = [];
+  for (let i = 0; i < comments.length; i += NUMBER_OF_SHOWED_COMMENTS) {
+    const NewArrayComments = comments.slice(i, i + NUMBER_OF_SHOWED_COMMENTS);
+    commentsBlocks.push(NewArrayComments);
   }
-
-  return button;
+  return commentsBlocks;
 };
 
-const setCommentsInfo = (showedComments, allComments) => {
-  commentsShowedCount.textContent = `${showedComments} из ${allComments} комментариев`;
-};
 
 const showBigPicture = (data) => {
-  commentList.innerHTML = '';
-
-  const loadButton = createCommentsLoadButton(loadButtonClick);
-  renderPicture(data);
-
-  function loadButtonClick() {
-    renderComments(data.comments.slice(CommentsLoaded.length, CommentsLoaded.length + NUMBER_OF_SHOWED_COMMENTS));
-    setCommentsInfo(CommentsLoaded.length, data.comments.length);
-    if (CommentsLoaded.length >= data.comments.length) {
-      loadButton.classList.add('hidden');
-    }
-  }
-
-  loadButtonClick();
-
-  cancelButton.addEventListener('click', onCancelButtonClick);
-  document.addEventListener('keydown', onEscKeyDown);
-
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
+  if (data.comments.length <= NUMBER_OF_SHOWED_COMMENTS) {
+    commentsLoaderButton.classList.add('hidden');
+  } else {
+    commentsLoaderButton.classList.remove('hidden');
+  }
+  renderPicture(data);
+  commentList.innerHTML = '';
+  commentsShowedCount.textContent = `${splitComments(data.comments)[0].length} из ${data.comments.length} комментариев`;
+  renderComments(splitComments(data.comments)[0]);
+  let count = 0;
+  commentsLoaderButton.addEventListener('click',onLoadButtonClick);
+  function onLoadButtonClick() {
+    count += 1;
+    commentsShowedCount.textContent = `${ CommentsLoaded.length + NUMBER_OF_SHOWED_COMMENTS} из ${data.comments.length} комментариев`;
+    renderComments(splitComments(data.comments)[count]);
+    if (NUMBER_OF_SHOWED_COMMENTS * count + NUMBER_OF_SHOWED_COMMENTS > data.comments.length - 1) {
+      commentsLoaderButton.classList.add('hidden');
+      commentsLoaderButton.removeEventListener('click',onLoadButtonClick);
+      commentsShowedCount.textContent = `${data.comments.length} из ${data.comments.length} комментариев`;
+    }
+  }
 };
+
+cancelButton.addEventListener('click', onCancelButtonClick);
+document.addEventListener('keydown', onEscKeyDown);
 
 export{showBigPicture};
