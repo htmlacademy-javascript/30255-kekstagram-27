@@ -1,3 +1,5 @@
+import {onscaleSmallerButtonClick} from './scale.js';
+import {onscaleBiggerButtonClick} from './scale.js';
 const closeButton = document.querySelector('#upload-cancel');
 const body = document.querySelector('body');
 const modal = document.querySelector('.img-upload__overlay');
@@ -5,6 +7,12 @@ const form = document.querySelector('.img-upload__form');
 const fileField = document.querySelector('#upload-file');
 const hashTagsField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+const scaleSmallerButton = document.querySelector('.scale__control--smaller');
+const scaleBiggerButton = document.querySelector('.scale__control--bigger');
+const ScaleControlValue = document.querySelector('.scale__control--value');
+const ScaledPicture = document.querySelector('.img-upload__preview');
+const ZOOM_DEFAULT = 100;
+
 
 const MAX_HASH_TAG_NUMBER = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -19,6 +27,10 @@ const showModal = () => {
   modal.classList.remove('hidden');
   body.classList.add('.modal-open');
   document.addEventListener('keydown', onEscKeyDown);
+  ScaleControlValue.value = `${ZOOM_DEFAULT}%`;
+  ScaledPicture.style.transform = `scale(${ZOOM_DEFAULT / 100})`;
+  scaleSmallerButton.addEventListener('click', onscaleSmallerButtonClick );
+  scaleBiggerButton.addEventListener('click', onscaleBiggerButtonClick );
 };
 
 const closeModal = () => {
@@ -27,6 +39,8 @@ const closeModal = () => {
   modal.classList.add('hidden');
   body.classList.remove('.modal-open');
   document.removeEventListener('keydown', onEscKeyDown);
+  scaleSmallerButton.removeEventListener('click', onscaleSmallerButtonClick );
+  scaleBiggerButton.removeEventListener('click', onscaleBiggerButtonClick );
 };
 
 const isTextFieldFocused = () =>
