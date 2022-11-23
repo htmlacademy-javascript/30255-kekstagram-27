@@ -64,7 +64,6 @@ const renderPicture = ({ url, likes, description }) => {
 };
 
 const createCommentsLoadButton = (onLoadButtonClick) => {
-  // Вот эти три строчки можно вынести в template
   const button = document.createElement('button');
   button.classList.value = 'social__comments-loader comments-loader';
   button.textContent = 'Загрузить еще';

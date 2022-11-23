@@ -1,3 +1,6 @@
+import {activateScaleControl} from './scale.js';
+import {resetEffects} from './effect.js';
+
 const closeButton = document.querySelector('#upload-cancel');
 const body = document.querySelector('body');
 const modal = document.querySelector('.img-upload__overlay');
@@ -19,10 +22,12 @@ const showModal = () => {
   modal.classList.remove('hidden');
   body.classList.add('.modal-open');
   document.addEventListener('keydown', onEscKeyDown);
+  activateScaleControl();
 };
 
 const closeModal = () => {
   form.reset();
+  resetEffects();
   pristine.reset();
   modal.classList.add('hidden');
   body.classList.remove('.modal-open');
