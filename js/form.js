@@ -68,11 +68,24 @@ pristine.addValidator(
 );
 closeButton.addEventListener('click', closeModal);
 fileField.addEventListener('change', showModal);
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if (isValid) {
+
+const setUserFormSubmit = (onSuccess) =>{
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
     // eslint-disable-next-line no-console
-    console.log('Форма отправлена');
-  }
-});
+      console.log('Форма отправлена');
+      const formData = new FormData(evt.target);
+
+      fetch (
+        'https://27.javascript.pages.academy/kekstagram',
+        {
+          method: 'POST',
+          body:formData,
+        },
+      ).then(() => onSuccess());
+    }
+  });
+};
+export {showModal,closeModal, setUserFormSubmit};
