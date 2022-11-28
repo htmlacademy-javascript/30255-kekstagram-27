@@ -1,5 +1,8 @@
 import {activateScaleControl} from './scale.js';
 import {resetEffects} from './effect.js';
+import {showMessageError} from './message_error.js';
+import {showMessageSuccess} from './message_success.js';
+import {sendData} from './api.js';
 
 const closeButton = document.querySelector('#upload-cancel');
 const body = document.querySelector('body');
@@ -8,6 +11,7 @@ const form = document.querySelector('.img-upload__form');
 const fileField = document.querySelector('#upload-file');
 const hashTagsField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const MAX_HASH_TAG_NUMBER = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -18,11 +22,16 @@ const pristine = new Pristine (form, {
   errorTextClass:'img-upload__field-wrapper_error',
 });
 
+const focusedTextField = () => {
+  commentField.focus();
+};
+
 const showModal = () => {
   modal.classList.remove('hidden');
   body.classList.add('.modal-open');
   document.addEventListener('keydown', onEscKeyDown);
   activateScaleControl();
+  submitButton.addEventListener('click', focusedTextField);
 };
 
 const closeModal = () => {
@@ -69,23 +78,33 @@ pristine.addValidator(
 closeButton.addEventListener('click', closeModal);
 fileField.addEventListener('change', showModal);
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
 const setUserFormSubmit = (onSuccess) =>{
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
-    // eslint-disable-next-line no-console
-      console.log('Форма отправлена');
-      const formData = new FormData(evt.target);
-
-      fetch (
-        'https://27.javascript.pages.academy/kekstagram',
-        {
-          method: 'POST',
-          body:formData,
+      blockSubmitButton();
+      sendData(
+        () => {onSuccess();
+          unblockSubmitButton();
+          showMessageSuccess();
         },
-      ).then(() => onSuccess());
+        () => {showMessageError();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
     }
   });
 };
-export {showModal,closeModal, setUserFormSubmit};
+export {closeModal, setUserFormSubmit};
