@@ -1,5 +1,7 @@
-import {makePhotos} from './data.js';
+//import {makePhotos} from './data.js';
+import {closeModal,setUserFormSubmit} from './form.js';
 import {renderPictures} from './picture.js';
-import './form.js';
+import {getData} from './api.js';
 
-renderPictures(makePhotos());
+getData(renderPictures);
+setUserFormSubmit(closeModal);
